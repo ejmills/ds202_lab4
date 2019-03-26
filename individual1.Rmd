@@ -1,6 +1,6 @@
 ---
-title: "Team; Lab 4"
-author: "Evan Mills, Max Farver"
+title: "Individual 1; Lab 4"
+author: "Evan Mills"
 date: "March 26, 2019"
 output: html_document
 ---
