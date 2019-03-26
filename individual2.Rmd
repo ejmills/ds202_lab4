@@ -1,0 +1,27 @@
+---
+title: "ds202_lab4"
+author: "Maxwell Farver"
+date: "March 26, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(readxl)
+defense <- read_excel('cyclonesFootball2018.xlsx', sheet='Defensive')
+str(defense)
+```
+
+```{r}
+offense <- read_excel('cyclonesFootball2018.xlsx', sheet='Offensive')
+str(offense)
+```
+
+
+```{r}
+biography <- read_excel('cyclonesFootball2018.xlsx', sheet='Biography')
+str(biography)
+```
