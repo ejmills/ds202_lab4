@@ -6,7 +6,23 @@ output: html_document
 ---
 
 ```{r}
+library(tidyr)
 library(readxl)
 defense <- read_excel('cyclonesFootball2018.xlsx', sheet='Defensive')
 str(defense)
+```
+
+```{r}
+offence <- read_excel('cyclonesFootball2018.xlsx', sheet='Offensive')
+str(offence)
+```
+
+```{r}
+bio <- read_excel('cyclonesFootball2018.xlsx', sheet='Biography')
+str(bio)
+```
+
+```{r}
+cleanBio <- bio %>% mutate(Weight, Weight = as.numeric(Weight))
+str(cleanBio)
 ```
