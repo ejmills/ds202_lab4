@@ -100,23 +100,59 @@ defClean
 biography
 ```
 
-
-
 ###Tidying###
 
 1)
 ```{r}
-ss
+defClean <- defClean %>% gather(key=Statistic, value=Recorded, 3:length(defClean))
+defClean
 ```
 
 2)
 ```{r}
+defClean %>% 
+  ggplot(aes(x=Recorded)) + geom_histogram() +
+  facet_wrap(~Statistic) + geom_abline(colour = "grey50")
+```
 
+3)
+```{r}
+WV <- defClean %>%
+  filter(Opponent_Opponent == 'West Virginia', Statistic == 'Tackles_Solo')
+
+KS <- defClean %>%
+  filter(Opponent_Opponent == 'Kansas State', Statistic == 'Tackles_Solo')
+
+ggplot()
+
+#TODO
+```
+
+####Part 2####
+1)
+```{r}
+biography <- biography %>% separate(Hometown, into= c('City', 'State'), sep=', ')
+```
+
+2)
+```{r}
+table(biography$State)
+```
+
+####Part 3####
+
+1)
+```{r}
+joined <- inner_join(biography, offClean, by = "Name")
+str(joined)
+```
+
+2)
+```{r}
+ggplot(joined, aes(x=Weight, y=Receiving_YDS)) + geom_point()
 ```
 
 3)
 ```{r}
 
 ```
-
-

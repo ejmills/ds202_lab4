@@ -6,9 +6,8 @@ output: html_document
 ---
 
 ```{r}
-library(tidyr)
+library(tidyverse)
 library(readxl)
-library(dplyr)
 defense <- read_excel('cyclonesFootball2018.xlsx', sheet='Defensive')
 str(defense)
 ```
@@ -19,12 +18,25 @@ str(offense)
 ```
 
 ```{r}
-bio <- read_excel('cyclonesFootball2018.xlsx', sheet='Biography')
-str(bio)
+biography <- read_excel('cyclonesFootball2018.xlsx', sheet='Biography')
+str(biography)
 ```
 
+###Cleaning###
+
+1)
 ```{r}
-offClean <- offense
+player_names <- factor(biography$Name)
+opponent_names <- factor(unique(defense$Opponent_Opponent))
+```
+
+2)
+```{r}
+offClean <- offense %>% separate(`Passing_CMP-ATT`, into = c("cmp", "att"), sep = '-')
+
+offClean$cmp <- str_replace(offClean$cmp, ' ', '')
+
+offClean$att <- str_replace(offClean$att, ' ', '')
 
 offClean <- offClean %>% mutate(Receiving_REC = as.numeric(Receiving_REC))
 
@@ -38,41 +50,93 @@ offClean <- offClean %>% mutate(Rushing_YDS = as.numeric(Rushing_YDS))
 
 offClean <- offClean %>% mutate(Rushing_TD = as.numeric(Rushing_TD))
 
-offClean <- offClean %>% mutate('Passing_CMP-ATT' = as.numeric('Passing_CMP-ATT'))
+offClean <- offClean %>% mutate(cmp = as.numeric(cmp))
+
+offClean <- offClean %>% mutate(att = as.numeric(att))
 
 offClean <- offClean %>% mutate(Passing_YDS = as.numeric(Passing_YDS))
 
 offClean <- offClean %>% mutate(Passing_TD = as.numeric(Passing_TD))
 
 offClean <- offClean %>% mutate(Passing_INT = as.numeric(Passing_INT))
-
-str(offClean)
 ```
 
 ```{r}
 defClean <- defense
-
 defClean <- defClean %>% mutate(Tackles_Solo, Tackles_Solo = as.numeric(Tackles_Solo))
-
 defClean <- defClean %>% mutate(Tackles_ASST, Tackles_ASST = as.numeric(Tackles_ASST))
-
 defClean <- defClean %>% mutate(Tackles_TFL, Tackles_TFL = as.numeric(Tackles_TFL))
-
 defClean <- defClean %>% mutate(Tackles_Sack, Tackles_Sack = as.numeric(Tackles_Sack))
-
 defClean <- defClean %>% mutate(Turnover_FF, Turnover_FF = as.numeric(Turnover_FF))
-
 defClean <- defClean %>% mutate(Turnover_FR, Turnover_FR = as.numeric(Turnover_FR))
-
 defClean <- defClean %>% mutate(Turnover_INT, Turnover_INT = as.numeric(Turnover_INT))
-
 defClean <- defClean %>% mutate(Pass_QBH, Pass_QBH = as.numeric(Pass_QBH))
-
 defClean <- defClean %>% mutate(Pass_PB, Pass_PB = as.numeric(Pass_PB))
+```
 
-str(defClean)
+3)
+```{r}
+biography <- biography %>% separate(Height, into = c('ft', 'inch'), sep = '-') %>%
+  mutate(Height = as.numeric(ft)*12 + as.numeric(inch))
+
+biography <- subset(biography, select = -c(ft, inch))
+
+```
 
 ```{r}
-cleanBio <- bio %>% mutate(Weight, Weight = as.numeric(Weight))
-str(cleanBio)
+offClean
+defClean
+biography
+```
+
+###Tidying###
+
+1)
+```{r}
+defClean <- defClean %>% gather(key=Statistic, value=Recorded, 3:length(defClean))
+defClean
+```
+
+2)
+```{r}
+defClean %>% 
+  ggplot(aes(x=Recorded)) + geom_histogram() +
+  facet_wrap(~Statistic) + geom_abline(colour = "grey50")
+```
+
+3)
+```{r}
+#TODO
+```
+
+
+####Part 2####
+
+1)
+```{r}
+biography <- biography %>% separate(Hometown, into= c('City', 'State'), sep=', ')
+```
+
+2)
+```{r}
+table(biography$State)
+```
+
+
+####Part 3####
+
+1)
+```{r}
+joined <- inner_join(biography, offClean, by = "Name")
+str(joined)
+```
+
+2)
+```{r}
+ggplot(joined, aes(x=Weight, y=Receiving_YDS)) + geom_point()
+```
+
+3)
+```{r}
+#TODO
 ```
