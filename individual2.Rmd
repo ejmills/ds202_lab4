@@ -77,21 +77,14 @@ defClean <- defClean %>% mutate(Turnover_FR, Turnover_FR = as.numeric(Turnover_F
 defClean <- defClean %>% mutate(Turnover_INT, Turnover_INT = as.numeric(Turnover_INT))
 defClean <- defClean %>% mutate(Pass_QBH, Pass_QBH = as.numeric(Pass_QBH))
 defClean <- defClean %>% mutate(Pass_PB, Pass_PB = as.numeric(Pass_PB))
-
-str(offClean)
-str(defClean)
 ```
 
 3)
 ```{r}
-#biography$Height <- as.numeric(unlist(str_split(biography$Height, '-'))[1]) * 12 + as.numeric(unlist(str_split(biography$Height, '-'))[2])
-
 biography <- biography %>% separate(Height, into = c('ft', 'inch'), sep = '-') %>%
   mutate(Height = as.numeric(ft)*12 + as.numeric(inch))
 
 biography <- subset(biography, select = -c(ft, inch))
-
-str(biography)
 ```
 
 ```{r}
@@ -112,8 +105,10 @@ defClean
 ```{r}
 defClean %>% 
   ggplot(aes(x=Recorded)) + geom_histogram() +
-  facet_wrap(~Statistic) + geom_abline(colour = "grey50")
+  facet_wrap(~Statistic, scales="free") + geom_abline(colour = "grey50")
 ```
+
+Turnover_FR, Pass_PB, Pass_QBH, Turnover_INT. Turnover_FF, Tackles_Sack
 
 3)
 ```{r}
@@ -123,10 +118,16 @@ WV <- defClean %>%
 KS <- defClean %>%
   filter(Opponent_Opponent == 'Kansas State', Statistic == 'Tackles_Solo')
 
-ggplot()
+tackles <- inner_join(WV, KS, by='Name')
+str(tackles)
 
-#TODO
+ggplot(tackles, aes(x=`Recorded.x`, y = `Recorded.y`)) + geom_point() +
+  xlab('West Virignia') +
+  ylab('Kansas State') +
+  ggtitle('Comparison between K State and West Virginia Games')
 ```
+
+We played better against Kansas State, there were fewer tackles made on average against West Virginia per player this season.
 
 ####Part 2####
 1)
@@ -151,6 +152,8 @@ str(joined)
 ```{r}
 ggplot(joined, aes(x=Weight, y=Receiving_YDS)) + geom_point()
 ```
+
+There seems to be a trend of lower weight athletes having more receiving yard. This is disregarding 225 as it leads me to believe it to be a singular player with multiple high-yardage games.
 
 3)
 ```{r}
