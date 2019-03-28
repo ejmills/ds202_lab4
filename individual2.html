@@ -458,6 +458,16 @@ str(joined)</code></pre>
 <ol start="3" style="list-style-type: decimal">
 <li></li>
 </ol>
+<pre class="r"><code>outlier &lt;- biography %&gt;%
+  filter(Weight == 225)
+
+outlier</code></pre>
+<pre><code>## # A tibble: 2 x 8
+##   Name       Position    Weight Class      City    State Highschool  Height
+##   &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;  &lt;chr&gt;      &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;        &lt;dbl&gt;
+## 1 Butler, H… Wide Recei… 225    Redshirt … Baltim… Md.   Travis {Te…     78
+## 2 Hurd, Gar… Tight End   225    Freshman   Story … Iowa  Roland-Sto…     73</code></pre>
+<p>I was curious to seee whether or not my guess was corrrect. I checked to see who weighed 225 during the season and sure enough Hakeem Butler was one of the two players. Butler is in the top 5 all time for receiving yards in Iowa State history, so he skews the graph fairly well.</p>
 </div>
 </div>
 

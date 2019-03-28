@@ -157,5 +157,10 @@ There seems to be a trend of lower weight athletes having more receiving yard. T
 
 3)
 ```{r}
+outlier <- biography %>%
+  filter(Weight == 225)
 
+outlier
 ```
+
+I was curious to seee whether or not my guess was corrrect. I checked to see who weighed 225 during the season and sure enough Hakeem Butler was one of the two players. Butler is in the top 5 all time for receiving yards in Iowa State history, so he skews the graph fairly well.
