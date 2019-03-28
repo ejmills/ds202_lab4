@@ -106,7 +106,15 @@ defClean %>%
 
 3)
 ```{r}
-#TODO
+WV <- defClean %>%
+  filter(Opponent_Opponent == 'West Virginia', Statistic == 'Tackles_Solo')
+
+KS <- defClean %>%
+  filter(Opponent_Opponent == 'Kansas State', Statistic == 'Tackles_Solo')
+
+tackles <- inner_join(WV, KS, by='Name')
+
+ggplot(tackles, aes(x=`Recorded.x`, y = `Recorded.y`)) + geom_point() + xlab('West Virginia') + ylab('Kansas State') + ggtitle("Solo Tackles against K State vs Solo Tackles against West Virginia")
 ```
 
 
@@ -138,5 +146,5 @@ ggplot(joined, aes(x=Weight, y=Receiving_YDS)) + geom_point()
 
 3)
 ```{r}
-#TODO
+ggplot(biography, aes(x = State)) + geom_bar();
 ```
