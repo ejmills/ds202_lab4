@@ -11,6 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r}
 library(readxl)
+library(tidyverse)
 defense <- read_excel('cyclonesFootball2018.xlsx', sheet='Defensive')
 str(defense)
 ```
@@ -25,3 +26,97 @@ str(offense)
 biography <- read_excel('cyclonesFootball2018.xlsx', sheet='Biography')
 str(biography)
 ```
+
+###Cleaning###
+
+1)
+```{r}
+player_names <- factor(biography$Name)
+opponent_names <- factor(unique(defense$Opponent_Opponent))
+```
+
+2)
+```{r}
+offClean <- offense %>% separate(`Passing_CMP-ATT`, into = c("cmp", "att"), sep = '-')
+
+offClean$cmp <- str_replace(offClean$cmp, ' ', '')
+
+offClean$att <- str_replace(offClean$att, ' ', '')
+
+offClean <- offClean %>% mutate(Receiving_REC = as.numeric(Receiving_REC))
+
+offClean <- offClean %>% mutate(Receiving_YDS = as.numeric(Receiving_YDS))
+
+offClean <- offClean %>% mutate(Receiving_TD = as.numeric(Receiving_TD))
+
+offClean <- offClean %>% mutate(Rushing_ATT = as.numeric(Rushing_ATT))
+
+offClean <- offClean %>% mutate(Rushing_YDS = as.numeric(Rushing_YDS))
+
+offClean <- offClean %>% mutate(Rushing_TD = as.numeric(Rushing_TD))
+
+offClean <- offClean %>% mutate(cmp = as.numeric(cmp))
+
+offClean <- offClean %>% mutate(att = as.numeric(att))
+
+offClean <- offClean %>% mutate(Passing_YDS = as.numeric(Passing_YDS))
+
+offClean <- offClean %>% mutate(Passing_TD = as.numeric(Passing_TD))
+
+offClean <- offClean %>% mutate(Passing_INT = as.numeric(Passing_INT))
+```
+
+```{r}
+defClean <- defense
+defClean <- defClean %>% mutate(Tackles_Solo, Tackles_Solo = as.numeric(Tackles_Solo))
+defClean <- defClean %>% mutate(Tackles_ASST, Tackles_ASST = as.numeric(Tackles_ASST))
+defClean <- defClean %>% mutate(Tackles_TFL, Tackles_TFL = as.numeric(Tackles_TFL))
+defClean <- defClean %>% mutate(Tackles_Sack, Tackles_Sack = as.numeric(Tackles_Sack))
+defClean <- defClean %>% mutate(Turnover_FF, Turnover_FF = as.numeric(Turnover_FF))
+defClean <- defClean %>% mutate(Turnover_FR, Turnover_FR = as.numeric(Turnover_FR))
+defClean <- defClean %>% mutate(Turnover_INT, Turnover_INT = as.numeric(Turnover_INT))
+defClean <- defClean %>% mutate(Pass_QBH, Pass_QBH = as.numeric(Pass_QBH))
+defClean <- defClean %>% mutate(Pass_PB, Pass_PB = as.numeric(Pass_PB))
+
+str(offClean)
+str(defClean)
+```
+
+3)
+```{r}
+#biography$Height <- as.numeric(unlist(str_split(biography$Height, '-'))[1]) * 12 + as.numeric(unlist(str_split(biography$Height, '-'))[2])
+
+biography <- biography %>% separate(Height, into = c('ft', 'inch'), sep = '-') %>%
+  mutate(Height = as.numeric(ft)*12 + as.numeric(inch))
+
+biography <- subset(biography, select = -c(ft, inch))
+
+str(biography)
+```
+
+```{r}
+offClean
+defClean
+biography
+```
+
+
+
+###Tidying###
+
+1)
+```{r}
+ss
+```
+
+2)
+```{r}
+
+```
+
+3)
+```{r}
+
+```
+
+
